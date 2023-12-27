@@ -24,10 +24,12 @@ export class RestService {
   private urlGetCargos = 'http://localhost:8081/auth/getCargos';
   private urlPostCargo = 'http://localhost:8081/auth/createCargo';
 
-  private urlGenerarTurnoClienteRegistrado ='http://localhost:8080/turnero/generarTurnoClienteRegistrado';
-  private urlGenerarTurnoClienteTemporal ='http://localhost:8080/turnero/generarTurnoClienteTemporal';
+  private urlGenerarTurnoClienteRegistrado =
+    'http://localhost:8080/turnero/generarTurnoClienteRegistrado';
+  private urlGenerarTurnoClienteTemporal =
+    'http://localhost:8080/turnero/generarTurnoClienteTemporal';
   private urlGetTurnos = 'http://localhost:8080/turnero/getClientesSinAtender';
-  private urlGetAtendidos = 'http://localhost:8080/turnero/getClientesAtendidos'
+  private urlGetAtendidos = 'http://localhost:8080/turnero/getClientesAtendidos';
   private urlPutEstadoTurnos = 'http://localhost:8080/turnero/atenderCliente';
 
   constructor(private httpClient: HttpClient) {}
@@ -102,8 +104,8 @@ export class RestService {
     return this.httpClient.get<any[]>(this.urlGetTurnos);
   }
 
-  public getClienteAtendido(): Observable<any[]>{
-    return this.httpClient.get<any[]>(this.urlGetAtendidos)
+  public getAtendidos(): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.urlGetAtendidos);
   }
 
   public putEstadoTurno(id: number): Observable<any> {

@@ -64,10 +64,10 @@
           <ng-container
             *ngIf="turno.clienteTemporal === null; else clienteTemporalFecha"
           >
-            {{ turno.fecha }}
+            <p>{{ turno.fecha | date:'dd/MM/yyyy' }} - {{ turno.fecha | date:'HH:mm' }}</p>
           </ng-container>
           <ng-template #clienteTemporalFecha>
-            {{ turno.fecha }}
+            <p>{{ turno.fecha | date:'dd/MM/yyyy' }} - {{ turno.fecha | date:'HH:mm' }}</p>
           </ng-template>
         </td>
 
@@ -92,9 +92,9 @@
   </table>
 </div>
 
-<!-- --------------------------------------------------------------------- -->
+
 <div class="container big-cart">
-  <h3>Listado Cliente atendidos</h3>
+  <h3>Listado de clientes atendidos</h3>
 
   <!-- Lista de Turnos -->
   <table class="table">
@@ -105,10 +105,11 @@
         <th>Número de Documento</th>
         <th>Número de Turno</th>
         <th>Fecha</th>
+        <th>Atendido</th>
       </tr>
     </thead>
     <tbody id="listaTurnos">
-      <tr *ngFor="let turno of turnosAtendidos">
+      <tr *ngFor="let turno of atendidosArray">
         <td>
           <ng-container
             *ngIf="turno.clienteTemporal === null; else clienteTemporalNombre"
@@ -157,10 +158,21 @@
           <ng-container
             *ngIf="turno.clienteTemporal === null; else clienteTemporalFecha"
           >
-            {{ turno.fecha }}
+          <p>{{ turno.fecha | date:'dd/MM/yyyy' }} - {{ turno.fecha | date:'HH:mm' }}</p>
           </ng-container>
           <ng-template #clienteTemporalFecha>
-            {{ turno.fecha }}
+            <p>{{ turno.fecha | date:'dd/MM/yyyy' }} - {{ turno.fecha | date:'HH:mm' }}</p>
+          </ng-template>
+        </td>
+
+        <td>
+          <ng-container
+            *ngIf="turno.clienteTemporal === null; else clienteTemporalAtendido"
+          >
+            {{ turno.atendido ? "Si" : "No" }}
+          </ng-container>
+          <ng-template #clienteTemporalAtendido>
+            {{ turno.atendido ? "Si" : "No" }}
           </ng-template>
         </td>
       </tr>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RestService } from '../rest.service';
 import Swal from 'sweetalert2';
 import { CustomerService } from '../customer.service';
-
+import { cliente } from '../cliente';
 @Component({
   selector: 'app-modificar-clientes',
   templateUrl: './modificar-clientes.component.html',
@@ -13,31 +13,7 @@ export class ModificarClientesComponent implements OnInit {
 
   numeroDoc: number = 0;
 
-  cliente = {
-    id: null,
-    nombre: '',
-    apellido: '',
-    email: '',
-    telefono: '',
-    id_tipo_doc: {
-      id_tipo_doc: null,
-      tipo_documento: '',
-    },
-    nro_doc: null,
-    id_categoria_fiscal: {
-      id_categoria: null,
-      descripcion: '',
-    },
-    id_tipo_cliente: {
-      id_tipo_cliente: null,
-      tipo_cliente: '',
-    },
-    id_clasificacion: {
-      id_clasificacion: null,
-      descripcion: '',
-    },
-    cant_puntos: 0,
-  };
+  cliente = new cliente();
 
   constructor(
     private restService: RestService,
@@ -59,8 +35,8 @@ export class ModificarClientesComponent implements OnInit {
     console.log(this.clienteArray);
 
     if (this.numeroDoc !== null && this.numeroDoc !== undefined) {
-      const clienteEncontrado = this.clienteArray.find(
-        (cliente) => cliente.nro_doc === this.numeroDoc
+      let clienteEncontrado = this.clienteArray.find(
+        (cliente) => cliente.nroDoc === this.numeroDoc
       );
 
       if (clienteEncontrado) {
@@ -81,6 +57,15 @@ export class ModificarClientesComponent implements OnInit {
         icon: 'warning',
         title: 'Número de documento vacío',
         text: 'Por favor, ingrese un número de documento válido para buscar al cliente.',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#808080',
+      });
+    }
+    if (this.numeroDoc == 0 || this.numeroDoc < 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'El numero ingresado no puede ser 0 o negativo',
+        text: 'Vuelva a ingresar el documento del cliente.',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#808080',
       });

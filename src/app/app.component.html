@@ -1,15 +1,23 @@
-<!-- <app-crear-clientes></app-crear-clientes>
-<app-modificar-clientes></app-modificar-clientes>
-<app-lista-clientes></app-lista-clientes> -->
 
-<!-- <app-login (loginSuccess)="onLoginSuccess()" *ngIf="showLoginForm && !isLogged"></app-login>
+
+<div class="containerBtn">
+    <button (click)="toggleComponent('mostrarComponentesClientes')" *ngIf="isLogged" class="buttonComponent">Clientes</button>
+    <button (click)="toggleComponent('mostrarComponentesUsuarios')" *ngIf="isLogged" class="buttonComponent">Usuarios</button>
+    <button (click)="toggleComponent('mostrarComponenteTurnero')" *ngIf="isLogged" class="buttonComponent">Turnos</button>
+</div>
+
+<app-crear-clientes *ngIf="isComponentVisible('mostrarComponentesClientes') && isLogged"></app-crear-clientes>
+<app-modificar-clientes *ngIf="isComponentVisible('mostrarComponentesClientes') && isLogged"></app-modificar-clientes>
+<app-lista-clientes *ngIf="isComponentVisible('mostrarComponentesClientes') && isLogged"></app-lista-clientes>
+<app-create-user *ngIf="isComponentVisible('mostrarComponentesUsuarios') && isLogged"></app-create-user>
+<app-delete-user *ngIf="isComponentVisible('mostrarComponentesUsuarios') && isLogged"></app-delete-user>
+<app-get-users *ngIf="isComponentVisible('mostrarComponentesUsuarios') && isLogged"></app-get-users>
+<app-create-position *ngIf="isComponentVisible('mostrarComponentesUsuarios') && isLogged"></app-create-position>
+<app-turnero *ngIf="isComponentVisible('mostrarComponenteTurnero') && isLogged"></app-turnero>
+<app-lista-tunero *ngIf="isComponentVisible('mostrarComponenteTurnero') && isLogged"></app-lista-tunero>
+
+
+
+<app-login (loginSuccess)="onLoginSuccess()" *ngIf="showLoginForm && !isLogged"></app-login>
 
 <app-logout *ngIf="isLogged"></app-logout>
-<app-create-user *ngIf="isLogged"></app-create-user>
-<app-delete-user *ngIf="isLogged"></app-delete-user>
-<app-get-users *ngIf="isLogged"></app-get-users>
-<app-create-position *ngIf="isLogged"></app-create-position> -->
-
-<app-turnero></app-turnero>
-<app-lista-tunero></app-lista-tunero>
-<app-lista-clientes-atendidos></app-lista-clientes-atendidos>

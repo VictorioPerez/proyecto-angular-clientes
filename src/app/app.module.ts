@@ -15,7 +15,6 @@ import { CreatePositionComponent } from './create-position/create-position.compo
 import { LogoutComponent } from './logout/logout.component';
 import { TurneroComponent } from './turnero/turnero.component';
 import { ListaTuneroComponent } from './lista-tunero/lista-tunero.component';
-import { ListaClientesAtendidosComponent } from './lista-clientes-atendidos/lista-clientes-atendidos.component';
 
 
 
@@ -33,8 +32,7 @@ import { ListaClientesAtendidosComponent } from './lista-clientes-atendidos/list
     CreatePositionComponent,
     LogoutComponent,
     TurneroComponent,
-    ListaTuneroComponent,
-    ListaClientesAtendidosComponent
+    ListaTuneroComponent
   ],
   imports: [
     BrowserModule,

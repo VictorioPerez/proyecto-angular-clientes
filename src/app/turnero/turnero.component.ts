@@ -1,9 +1,8 @@
+import { TurnoService } from './../turno.service';
 import { Component, ViewChild } from '@angular/core';
 import { RestService } from '../rest.service';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { TurneroService } from '../turnero.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-turnero',
@@ -27,9 +26,19 @@ export class TurneroComponent {
 
   clienteRegistrado: any;
   turnoGenerado: any;
- 
 
-  constructor(private restService: RestService, private turnoService:TurneroService) {
+  turnosArray: any[] = [];
+
+  constructor(
+    private restService: RestService,
+    private turnoService: TurnoService
+  ) {}
+
+  getListClientes() {
+    this.restService.getTurnos().subscribe((info: any) => {
+      this.turnosArray = info;
+      console.log(this.turnosArray);
+    });
   }
 
   verificarCliente() {
@@ -44,30 +53,48 @@ export class TurneroComponent {
       return;
     }
 
-    this.restService.getClientes().subscribe((clientes) => {
-      let clienteExiste = clientes.some(
-        (cliente) => cliente.nroDoc == this.numeroDocumento
+    this.restService.getTurnos().subscribe((turnos) => {
+      const clienteConTurno = turnos.some(
+        (turno) =>
+          turno.cliente?.nroDoc === this.numeroDocumento ||
+          turno.clienteTemporal?.nroDoc === this.numeroDocumento
       );
 
-      if (clienteExiste) {
-        this.generarTurnoClienteRegistrado();
-        this.generarTurnoForm.reset();
-      } else {
+      if (clienteConTurno) {
         Swal.fire({
           icon: 'error',
-          title: 'Cliente no encontrado',
-          text: 'El número de documento ingresado no corresponde a ningún cliente existente en la base de datos',
-          showCancelButton: true,
-          showConfirmButton: true,
-          cancelButtonText: 'Cancelar',
-          confirmButtonText: 'Registrar cliente temporal',
-          cancelButtonColor: '#808080',
-          confirmButtonColor: '#308B45',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.mostrarFormRegistrarClienteTemporal();
-            this.clienteTemporal.nroDoc = this.numeroDocumento;
-          } else if (result.isDismissed) {
+          title: 'El cliente ingresado ya tiene un turno asignado',
+          text: 'Espere que el turno sea atendido para poder sacar uno nuevo',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#808080',
+        });
+      } else {
+        this.restService.getClientes().subscribe((clientes) => {
+          const clienteExiste = clientes.some(
+            (cliente) => cliente.nroDoc == this.numeroDocumento
+          );
+
+          if (clienteExiste) {
+            this.generarTurnoClienteRegistrado();
+            this.generarTurnoForm.reset();
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Cliente no encontrado',
+              text: 'El número de documento ingresado no corresponde a ningún cliente existente en la base de datos',
+              showCancelButton: true,
+              showConfirmButton: true,
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Registrar cliente temporal',
+              cancelButtonColor: '#808080',
+              confirmButtonColor: '#308B45',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.mostrarFormRegistrarClienteTemporal();
+                this.clienteTemporal.nroDoc = this.numeroDocumento;
+              } else if (result.isDismissed) {
+              }
+            });
           }
         });
       }
@@ -79,10 +106,17 @@ export class TurneroComponent {
   }
 
   generarTurnoClienteRegistrado() {
-    let nroDoc = this.numeroDocumento;
+    const nroDoc = this.numeroDocumento;
 
-    this.restService.generarTurnoClienteRegistrado(nroDoc).subscribe((turno) => {
+    this.restService
+      .generarTurnoClienteRegistrado(nroDoc)
+      .subscribe((turno) => {
         this.turnoGenerado = turno;
+
+        console.log(this.turnoGenerado);
+
+        this.turnoService.agregarTurno(turno);
+
         Swal.fire({
           icon: 'success',
           title: 'Turno generado exitosamente!',
@@ -96,11 +130,7 @@ export class TurneroComponent {
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#808080',
         });
-        
-        this.turnoService.agregarTurno(turno)
-        
       });
-  
   }
 
   generarTurnoClienteTemporal() {
@@ -108,8 +138,10 @@ export class TurneroComponent {
       .generarTurnoClienteTemporal(this.clienteTemporal)
       .subscribe((turno) => {
         this.turnoGenerado = turno;
+
         console.log(this.turnoGenerado);
-        this.turnoService.agregarTurno(turno)
+
+        this.turnoService.agregarTurno(turno);
 
         Swal.fire({
           icon: 'success',
@@ -126,6 +158,8 @@ export class TurneroComponent {
         });
 
         this.generarTurnoTemporalesForm.reset();
+
+        this.mostrarFormTemporal = false;
       });
   }
 

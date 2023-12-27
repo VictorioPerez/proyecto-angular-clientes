@@ -18,6 +18,7 @@ export class AppComponent implements OnInit{
     this.isLogged = true;
     this.showLoginForm = false; // Oculta el formulario de inicio de sesión después de iniciar sesión
   }
+  
   ngOnInit(): void {
     let authToken = localStorage.getItem('tokenLogin');
     if (authToken) {
@@ -29,4 +30,19 @@ export class AppComponent implements OnInit{
       this.showLoginForm = true
     }
   }
+  visibilityState: { [key: string]: boolean } = {
+    mostrarComponentesClientes: false,
+    mostrarComponentesUsuarios: false,
+    mostrarComponenteTurnero: false,
+  };
+
+  toggleComponent(component: string) {
+    this.visibilityState[component] = !this.visibilityState[component];
+  }
+
+  isComponentVisible(component: string) {
+    return this.visibilityState[component];
+  }
+
+
 }
